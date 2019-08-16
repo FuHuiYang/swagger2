@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 
+import java.io.Serializable;
+
 /**
  * @author : yangfuhui
  * @Project: swagger2
@@ -12,7 +14,8 @@ import io.swagger.annotations.ApiOperation;
  * @date Date : 2019年08月15日 9:53
  */
 @ApiModel
-public class User {
+public class User implements Serializable {
+    private static final long serialVersionUID = 1L;
     @ApiModelProperty(value = "用户Id")
     private Integer id;
     @ApiModelProperty(value = "用户姓名")

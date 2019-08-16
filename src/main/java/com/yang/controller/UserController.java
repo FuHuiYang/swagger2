@@ -2,10 +2,12 @@ package com.yang.controller;
 
 import com.yang.bean.RespBean;
 import com.yang.bean.User;
+import com.yang.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "用户管理相关接口")
 @RequestMapping("/user")
 public class UserController {
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/add")
     @ApiOperation("添加用户接口")
@@ -35,15 +39,17 @@ public class UserController {
     @ApiOperation("根据用户id查询用户接口")
     @ApiImplicitParam(name = "id",value = "用户id",defaultValue = "99",required = true,type = "integer")
     public User selectUserById(Integer id){
-        User user =new User();
-        user.setId(id);
+        User user = userService.getUserById(id, "2123");
+//        User user =new User();
+//        user.setId(id);
         return user;
     }
 
     @PutMapping("/update")
     @ApiOperation("根据id更新用户")
     public User updateUserById(@RequestBody User user){
-        return user;
+        User user1 = userService.updateUserById(user);
+        return user1;
     }
     /**
      * 根据id删除用户
@@ -54,6 +60,7 @@ public class UserController {
     @ApiImplicitParam(name = "id", value = "用户ID",dataType = "integer", paramType = "path")
     @RequestMapping(value = "del/{id}", method = RequestMethod.DELETE)
     public Integer delete (@PathVariable(value = "id") Integer id){
+        userService.delUserById(id);
        User user =new User();
        user.setId(id);
         return user.getId();
