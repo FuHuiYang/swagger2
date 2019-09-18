@@ -16,8 +16,8 @@ import java.util.Set;
  * @Description: TODO
  * @date Date : 2019年08月26日 14:07
  */
-@Component
-@Order(98)
+//@Component
+//@Order(98)
 public class MyApplicationRunner1 implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {

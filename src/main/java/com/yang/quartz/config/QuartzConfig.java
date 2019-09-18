@@ -16,7 +16,7 @@ import java.util.Date;
  * @Description: TODO
  * @date Date : 2019年08月27日 14:17
  */
-@Configuration
+//@Configuration
 public class QuartzConfig {
     @Bean
     MethodInvokingJobDetailFactoryBean methodInvokingJobDetailFactoryBean() {
