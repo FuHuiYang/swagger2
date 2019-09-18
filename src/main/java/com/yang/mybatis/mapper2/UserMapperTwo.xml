@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yang.mybatis.mapper2.UserMapperTwo">
+    <select id="getAllUser" resultType="com.yang.bean.User">
+        select * from user;
+    </select>
+    <insert id="addUser" parameterType="com.yang.bean.User">
+        insert into user (username,address) values (#{username},#{address});
+    </insert>
+    <update id="updateUserById" parameterType="com.yang.bean.User">
+        update user set username=#{username},address=#{address} where id=#{id}
+    </update>
+    <delete id="deleteUserById">
+        delete from user where id=#{id}
+    </delete>
+</mapper>
