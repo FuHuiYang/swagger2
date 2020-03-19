@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <script type="text/javascript" src="/js/jquery-1.7.js"></script>
+    <script type="text/javascript" src="/js/echarts.min.js"></script>
+
+    <title>JJ</title>
+</head>
+<script type="text/javascript">
+    var option
+    var myChart
+
+    $(function () {
+        initChart()
+        //基于准备好的dom，初始化echarts实例
+        myChart = echarts.init(document.getElementById('main'));
+        //myChart.setOption(option)
+    })
+
+    function showWeight() {
+        var startdate=$("#startdate").val();
+        var enddate=$("#enddate").val();
+        $.ajax({
+            type: "GET",
+            url: "/sz/selectSZIndex?startdate="+startdate+"&enddate="+enddate,
+            data: {},
+            success: function (r) {
+                //console.log(r)
+                initChart()
+                //option.title.text = r.username+"的体重"
+                option.legend.data[0] = r.closePrice
+                option.series[0] = {"name": r.closePrice, "type": "line", "data": []}
+                //option.series[0].name = r.username
+                //option.series[0].type = 'line'
+                for (var i in r) {
+                    option.series[0].data[i] = r[i].closePrice
+                    option.xAxis[0].data[i] = changeDate(r[i].closeTime);
+                }
+                //option.series[1] = {"name": r.username, "type": "line", "data": [1,2,8,12,21,9]}
+                myChart.setOption(option)
+            }
+        });
+    }
+
+    function initChart() {
+        option = {
+            title: {
+                text: "指数表",
+                x: "center"
+            },
+            tooltip: {
+                trigger: "item",
+                formatter: "{a} <br/>{b} : {c}"
+            },
+            legend: {
+                x: 'left',
+                data: []
+            },
+            xAxis: [
+                {
+                    type: "category",
+                    name: "日期",
+                    splitLine: {show: false},
+                    axisLabel: {
+                        formatter: function(params,index){
+                            var time =new Date(params);
+                            var year = time.getFullYear();
+                            var month = time.getMonth();
+                            var day =time.getDate();
+                            return (year+"-"+(month+1)+"-"+day);
+                        }
+                    },
+                    data: []
+                }
+            ],
+            yAxis: [
+                {
+                    type: "value",
+                    axisLabel: {
+                        formatter: '{value}'
+                    },
+                    name: "收盘价",
+                    max: 6000,
+                    min: 2000,
+                    splitNumber: 5
+                }
+            ],
+            toolbox: {
+                show: true,
+                feature: {
+                    mark: {
+                        show: true
+                    },
+                    dataView: {
+                        show: true,
+                        readOnly: true
+                    },
+                    restore: {
+                        show: true
+                    },
+                    saveAsImage: {
+                        show: true
+                    }
+                }
+            },
+            calculable: true,
+            series: []
+        };
+    }
+    function changeDate(date) {
+        var time =new Date(date);
+        var year = time.getFullYear();
+        var month = time.getMonth();
+        var day =time.getDate();
+        return (year+"-"+(month+1)+"-"+day);
+    }
+    function pullData() {
+        var year=$("#year").val();
+        var quarter=$("#quarter").val();
+        var number=$("#number").val();
+        $.ajax({
+            type: "GET",
+            url: "/sz/pullSZData?year="+year+"&quarter="+quarter+"&number="+number,
+            data: {},
+            success: function (r) {
+                alert("成功")
+            }
+        });
+    }
+</script>
+<body>
+<h1 style="text-align: center">指数查看页面</h1>
+<input id="year" value="2020"/>年，
+第<input id="quarter" value="1"/>季度，
+前<input id="number" value="2"/>条
+<a href="javascript:void(0)" onclick="pullData()"
+   style="text-decoration: none;">拉取数据</a>
+查询时间：<input id="startdate" value="2020-01-01"/> - <input id="enddate" value="2020-04-01"/>
+<a href="javascript:void(0)" onclick="showWeight()"
+   style="text-decoration: none;margin-left: 140px">查看</a>
+<div id="main" style="height:460px;width: 85%;margin: 20px auto 0"></div>
+</body>
+</html>

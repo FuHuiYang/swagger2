@@ -26,4 +26,9 @@ public class DataSourceConfig {
     DataSource dsTwo() {
         return DruidDataSourceBuilder.create().build();
     }
+    @Bean
+    @ConfigurationProperties(prefix = "spring.datasource.three")
+    DataSource dsThree() {
+        return DruidDataSourceBuilder.create().build();
+    }
 }
